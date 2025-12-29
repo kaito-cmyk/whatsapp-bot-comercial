@@ -1,0 +1,19 @@
+# Usamos la imagen oficial que ya tiene Python y los drivers de navegación
+FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Instalamos dependencias de Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Instalamos Chromium (el motor que usa tu código en 'self.pw.chromium')
+RUN playwright install chromium
+RUN playwright install-deps chromium
+
+# Copiamos todo: bot.py y la carpeta /bot (motor y configuracion)
+COPY . .
+
+# EJECUCIÓN: Este comando inicia tu clase WhatsAppBot
+CMD ["python", "bot.py"]
